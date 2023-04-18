@@ -1,0 +1,31 @@
+{
+    "name": "bidb97/cross-posting",
+    "description": "Cross-posting to social networks",
+    "keywords": [
+        "laravel",
+        "share",
+        "cross posting",
+        "social network"
+    ],
+    "authors": [
+        {
+            "name": "bidb97",
+            "email": "mantisa1824@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Bidb97\\CrossPosting\\": "src/app"
+        }
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bidb97\\CrossPosting\\Providers\\CrossPostingServiceProvider"
+            ]
+        }
+    }
+}
