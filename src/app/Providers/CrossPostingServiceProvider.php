@@ -8,11 +8,10 @@ class CrossPostingServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
+        $this->publishes([
+            __DIR__ . '/../../config/cross-posting.php' => config_path('bidb97/cross-posting.php'),
+        ], 'cross-posting');
 
-    }
-
-    public function register(): void
-    {
-
+        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
     }
 }
