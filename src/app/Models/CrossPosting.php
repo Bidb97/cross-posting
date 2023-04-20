@@ -9,7 +9,7 @@ class CrossPosting extends Model
     /**
      * @var string
      */
-    protected $table = 'bidb97_cross_posting';
+    protected $table = 'cross_posting';
 
     /**
      * @var string[]

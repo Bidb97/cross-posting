@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBidb97CrossPostingTable extends Migration
+class CreateCrossPostingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateBidb97CrossPostingTable extends Migration
      */
     public function up()
     {
-        Schema::create('bidb97_cross_posting', function (Blueprint $table) {
+        Schema::create('cross_posting', function (Blueprint $table) {
             $table->string('model');
             $table->bigInteger('model_id');
             $table->text('posting_data');
@@ -34,6 +34,6 @@ class CreateBidb97CrossPostingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bidb97_cross_posting');
+        Schema::dropIfExists('cross_posting');
     }
 }

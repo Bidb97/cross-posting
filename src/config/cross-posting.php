@@ -1,16 +1,35 @@
 <?php
 
-use Bidb97\CrossPosting\Services\SocialProviders;
+use Bidb97\CrossPosting\Services\CrossPostingProviders;
 
 return [
 
+    /*
+    |--------------------------------------------------------------------------
+    | Social providers
+    |--------------------------------------------------------------------------
+    |
+    | Services for sending data to socials networks
+    | When adding a new social network, add the social provider to this list
+    |
+    */
     'posting_to' => [
-        SocialProviders\Telegram::class,
-        SocialProviders\Vk::class,
-        SocialProviders\Ok::class
+        CrossPostingProviders\Telegram::class,
+        CrossPostingProviders\Vk::class,
+        CrossPostingProviders\Ok::class
     ],
 
-    'social_providers' => [
+    /*
+    |--------------------------------------------------------------------------
+    | Social providers configs
+    |--------------------------------------------------------------------------
+    |
+    | Social networks configs, configs are presented in the form of arrays,
+    | for working with multiple social network accounts
+    | When adding a new social network, add the social provider to this list
+    |
+    */
+    'configs' => [
 
         'telegram' => [
             [
@@ -27,6 +46,27 @@ return [
 
         ]
 
-    ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Proxy
+    |--------------------------------------------------------------------------
+    |
+    | To send requests through a proxy
+    | Examples:
+    | - http://localhost:8125
+    | - http://username:password@localhost:8125
+    |
+    */
+    'proxy' => env('CROSS_POSTING_PROXY'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Short Link Path
+    |--------------------------------------------------------------------------
+    |
+    */
+    'short_link_path' => env('CROSS_POSTING_SHORT_LINK_PATH', 'short'),
 
 ];
