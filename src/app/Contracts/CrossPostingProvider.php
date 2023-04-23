@@ -11,5 +11,8 @@ interface CrossPostingProvider
      */
     public function __construct(CrossPosting $crossPosting);
 
+    /**
+     * Share on social network
+     */
     public function share(): void;
 }

@@ -46,7 +46,7 @@ class Telegram implements CrossPostingProvider
 
             if (!empty($this->crossPosting->posting_data['image'])) {
                 $method = 'sendPhoto';
-                $requestParams['photo'] = 'https://mobimg.b-cdn.net/v3/fetch/0c/0c89d00a188cc6bbc0c6098ad960b26c.jpeg';asset($this->crossPosting->posting_data['image']);
+                $requestParams['photo'] = asset($this->crossPosting->posting_data['image']);
                 $requestParams['caption'] = $message;
             } else {
                 $method = 'sendMessage';

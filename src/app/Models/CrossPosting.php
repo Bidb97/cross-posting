@@ -45,4 +45,16 @@ class CrossPosting extends Model
     protected $casts = [
         'posting_data' => 'array'
     ];
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function setKeysForSaveQuery($query)
+    {
+        return $query->where([
+            'model' => $this->model,
+            'model_id' => $this->model_id
+        ]);
+    }
 }

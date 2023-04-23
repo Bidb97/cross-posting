@@ -29,10 +29,9 @@ class ClientModelObserver
     {
         $postingData = $this->getPostingData();
         $publishDate = $this->getPublishDate();
+        $shortUri = substr(md5(uniqid(null, true)), 0, config('cross-posting.short_link_length'));
 
-        $crossPosting = DB::transaction(function () use ($postingData, $publishDate) {
-
-            $shortUri = substr(md5(uniqid(null, true)), 0, 12);
+        $crossPosting = DB::transaction(function () use ($postingData, $publishDate, $shortUri) {
 
             $crossPosting = Models\CrossPosting::where('short_uri', $shortUri)
                 ->limit(1)

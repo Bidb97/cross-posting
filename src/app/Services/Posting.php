@@ -15,6 +15,9 @@ class Posting
         foreach (config('cross-posting.posting_to') as $crossPostingProvider) {
             $this->share(new $crossPostingProvider($crossPosting));
         }
+
+        $crossPosting->is_posted = true;
+        $crossPosting->save();
     }
 
     /**
