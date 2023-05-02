@@ -5,14 +5,25 @@ namespace Bidb97\CrossPosting\Observers;
 use Bidb97\CrossPosting\Contracts\CrossPosting;
 use Bidb97\CrossPosting\Models;
 use Bidb97\CrossPosting\Services\Posting;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class ClientModelObserver
+class ClientModel
 {
     /**
      * @var CrossPosting
      */
     private $clientModel;
+
+    /**
+     * Min length short link
+     */
+    const SHORT_LINK_MIN_LENGTH = 8;
+
+    /**
+     * Max length short link
+     */
+    const SHORT_LINK_MAX_LENGTH = 16;
 
     /**
      * @param CrossPosting $clientModel
@@ -27,11 +38,10 @@ class ClientModelObserver
      */
     public function created()
     {
-        $postingData = $this->getPostingData();
         $publishDate = $this->getPublishDate();
-        $shortUri = substr(md5(uniqid(null, true)), 0, config('cross-posting.short_link_length'));
+        $shortUri = substr(md5(uniqid(null, true)), 0, $this->getShortLinkLength());
 
-        $crossPosting = DB::transaction(function () use ($postingData, $publishDate, $shortUri) {
+        $crossPosting = DB::transaction(function () use ($publishDate, $shortUri) {
 
             $crossPosting = Models\CrossPosting::where('short_uri', $shortUri)
                 ->limit(1)
@@ -46,19 +56,16 @@ class ClientModelObserver
             $data = [
                 'model' => get_class($this->clientModel),
                 'model_id' => $this->clientModel->{$this->clientModel->getKeyName()},
-                'posting_data' => $postingData,
-                'resource_uri' => $this->resourceUri(),
+                'posting_data' => $this->getPostingData(),
+                'resource_uri' => $this->getResourceUri(),
                 'short_uri' => $shortUri,
+                'publish_date' => $publishDate
             ];
-
-            if (!empty($publishDate)) {
-                $data['publish_date'] = $publishDate;
-            }
 
             return Models\CrossPosting::create($data);
         });
 
-        if (empty($publishDate)) {
+        if ($publishDate <= now()) {
             (new Posting())->run($crossPosting);
             /*dispatch(function () use ($crossPosting) {
 
@@ -84,18 +91,28 @@ class ClientModelObserver
             return;
         }
 
-        $postingData = $this->getPostingData();
+        $publishDate = $this->getPublishDate();
+
+        $data = [
+            'posting_data' => $this->getPostingData(),
+            'resource_uri' => $this->getResourceUri(),
+            'publish_date' => $publishDate
+        ];
+
+        $crossPosting->update($data);
     }
 
     /**
-     * @return string
+     * @return Carbon
      */
-    public function getPublishDate(): string
+    private function getPublishDate(): Carbon
     {
         $dataMapping = $this->clientModel->getDataMapping();
         $attributes = $this->clientModel->getAttributes();
 
-        return (string) $attributes[$dataMapping['publish_date']];
+        $publishDate = $attributes[$dataMapping['publish_date']];
+
+        return (!empty($publishDate) ? Carbon::parse($publishDate) : now());
     }
 
     /**
@@ -116,7 +133,7 @@ class ClientModelObserver
     /**
      * @return string
      */
-    private function resourceUri(): string
+    private function getResourceUri(): string
     {
         $parseUrl = parse_url($this->clientModel->getResourceUri());
 
@@ -127,6 +144,20 @@ class ClientModelObserver
         }
 
         return $resourceUri;
+    }
+
+    /**
+     * @return int
+     */
+    private function getShortLinkLength(): int
+    {
+        $shortLinkLength = config('cross-posting.short_link_length');
+
+        if ($shortLinkLength >= self::SHORT_LINK_MIN_LENGTH && $shortLinkLength <= self::SHORT_LINK_MAX_LENGTH) {
+            return $shortLinkLength;
+        }
+
+        return self::SHORT_LINK_MIN_LENGTH;
     }
 
 

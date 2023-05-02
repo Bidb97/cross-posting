@@ -18,7 +18,7 @@ class CreateCrossPostingTable extends Migration
             $table->bigInteger('model_id');
             $table->text('posting_data');
             $table->string('resource_uri');
-            $table->char('short_uri', 12);
+            $table->char('short_uri', 16);
             $table->dateTime('publish_date')->useCurrent();
             $table->boolean('is_posted')->default(false);
             $table->softDeletes();

@@ -30,7 +30,7 @@ class Telegram implements CrossPostingProvider
 
     public function share(): void
     {
-        $shortUri = route('cross-posting:short.show', ['short_uri' => $this->crossPosting->short_uri]);
+        $shortUri = route('cross-posting:short.show', ['shortUri' => $this->crossPosting->short_uri]);
 
         $message = "*" . $this->crossPosting->posting_data['title'] . "*" . "\r\n"
                     . Str::limit(strip_tags($this->crossPosting->posting_data['content']), 5000) . "\r\n"

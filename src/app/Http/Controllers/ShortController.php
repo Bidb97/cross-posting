@@ -3,12 +3,15 @@
 namespace Bidb97\CrossPosting\Http\Controllers;
 
 use Bidb97\CrossPosting\Models\CrossPosting;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 
 class ShortController
 {
     /**
      * @param $shortUri
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|RedirectResponse|Redirector
      */
     public function __invoke($shortUri)
     {

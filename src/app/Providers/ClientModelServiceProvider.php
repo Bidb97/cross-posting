@@ -5,9 +5,9 @@ namespace Bidb97\CrossPosting\Providers;
 use Bidb97\CrossPosting\Contracts\CrossPosting;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
-use Bidb97\CrossPosting\Observers\ClientModelObserver;
+use Bidb97\CrossPosting\Observers\ClientModel;
 
-class ObserverServiceProvider extends ServiceProvider
+class ClientModelServiceProvider extends ServiceProvider
 {
     public function boot()
     {
@@ -19,11 +19,11 @@ class ObserverServiceProvider extends ServiceProvider
                 return;
             }
 
-            $this->app->bind(ClientModelObserver::class, function () use ($model) {
-                return new ClientModelObserver($model);
+            $this->app->bind(ClientModel::class, function () use ($model) {
+                return new ClientModel($model);
             });
 
-            $model::observe(ClientModelObserver::class);
+            $model::observe(ClientModel::class);
         });
     }
 }
